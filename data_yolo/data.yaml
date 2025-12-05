@@ -1,0 +1,13 @@
+train: C:\\Users\\nguye\\PycharmProjects\\PythonProject\\data_yolo\\train\\images
+val: C:\\Users\\nguye\\PycharmProjects\\PythonProject\\data_yolo\\valid\\images
+test: C:\\Users\\nguye\\PycharmProjects\\PythonProject\\data_yolo\\test\\images
+
+nc: 16
+names: ['di cham', 'cam queo phai', 'cam queo trai', 'cam do xe', 'cam dung cam do', 'cam', 'huong di vong sang phai', 'toc do toi da 60km/h', 'toc do toi da 50km/h', 'nguoi qua duong', 'xe buyt', 'cam oto', 'giao nhau voi duong uu tien', 'tre em qua duong', 'cam xe tai', 'cam xe tai lon']
+
+roboflow:
+  workspace: xulyanh-b7gm3
+  project: traffic-sign-hs-yolo
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/xulyanh-b7gm3/traffic-sign-hs-yolo/dataset/1
