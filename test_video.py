@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 model = YOLO(r"C:\Users\nguye\PycharmProjects\PythonProject\Weight-yolo11s\best.pt")
-cap = cv2.VideoCapture(r"C:\Users\nguye\PycharmProjects\PythonProject\Test_resource\video\Untitled video - Made with Clipchamp.mp4")
+cap = cv2.VideoCapture(r"C:\Users\nguye\PycharmProjects\PythonProject\Test_resource\video\PXL_20251205_105836217.mp4")
 
 if not cap.isOpened():
     print("Không mở được video!")

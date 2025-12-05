@@ -8,9 +8,11 @@ from gtts import gTTS
 from ultralytics import YOLO
 
 model_path = r"C:\Users\nguye\PycharmProjects\PythonProject\Weight-yolo11s\best.pt"
-video_path = r"C:\Users\nguye\Downloads\Untitled video - Made with Clipchamp.mp4"
-conf_threshold = 0.5
+video_path = r"C:\Users\nguye\PycharmProjects\PythonProject\Test_resource\video\test_1.mp4"
+conf_threshold = 0.4
 cooldown_duration = 5.0
+frame_threshold = 15    # 1 khoảng 15 Frame
+required_count = 5      # đếm số lượng/ tần xuất xuất hiện liên tục của nhãn biển báo
 traffic_sign_ref = {
     'ben_xe_buyt': 'biển bến xe buýt',
     'cam_di_nguoc_chieu': 'biển cấm đi ngược chiều',
@@ -29,12 +31,11 @@ traffic_sign_ref = {
     'toc_do_toi_da_60kmh': 'biển tốc độ tối đa sáu mươi ki lô mét một giờ',
     'tre_em': 'biển báo trẻ em'
 }
-
-# --- KHỞI TẠO ---
 pygame.mixer.init()
 speech_queue = queue.Queue()
 model = YOLO(model_path)
 last_alert_time = {}
+detection_history = {}
 
 def audio_worker():
     while True:
@@ -71,24 +72,35 @@ t.start()
 def process_frame(frame):
     results = model(frame, conf=conf_threshold, verbose=False)
     current_time = time.time()
+
     for result in results:
         boxes = result.boxes
         for box in boxes:
-            # Lấy thông tin
             x1, y1, x2, y2 = map(int, box.xyxy[0])
             cls_id = int(box.cls[0])
             class_name = model.names[cls_id]
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(frame, class_name, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            cv2.putText(frame, class_name, (x1, y1 - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-            if class_name not in last_alert_time or (current_time - last_alert_time[class_name] > cooldown_duration):
-                print(f"{traffic_sign_ref[class_name]}")
-                last_alert_time[class_name] = current_time
+            history = detection_history.setdefault(class_name, [])
+            history.append(current_time)
+            if len(history) > frame_threshold:
+                history.pop(0)
+            if len(history) < required_count:
+                continue
+            last_time = last_alert_time.get(class_name, 0)
+            if current_time - last_time < cooldown_duration:
+                continue
+            readable_text = traffic_sign_ref[class_name]
+            print(readable_text)
 
-                # Đẩy vào queue để luồng kia xử lý
-                speech_queue.put(f"{traffic_sign_ref[class_name]}")
+            speech_queue.put(readable_text)
+
+            last_alert_time[class_name] = current_time
 
     return frame
+
 
 
 # --- 3. CHƯƠNG TRÌNH CHÍNH ---
