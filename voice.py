@@ -7,11 +7,11 @@ import pygame
 from gtts import gTTS
 from ultralytics import YOLO
 
-model_path = r"C:\Users\nguye\PycharmProjects\PythonProject\Weight-yolo11s\best.pt"
+model_path = r"C:\Users\nguye\PycharmProjects\PythonProject\Weight-yolo11s\best_2.pt"
 video_path = r"C:\Users\nguye\PycharmProjects\PythonProject\Test_resource\video\test_1.mp4"
-conf_threshold = 0.4
-cooldown_duration = 5.0
-frame_threshold = 15    # 1 khoảng 15 Frame
+conf_threshold = 0.8
+cooldown_duration = 10.0
+frame_threshold = 30    # 1 khoảng 15 Frame
 required_count = 5      # đếm số lượng/ tần xuất xuất hiện liên tục của nhãn biển báo
 traffic_sign_ref = {
     'ben_xe_buyt': 'biển bến xe buýt',
@@ -27,8 +27,8 @@ traffic_sign_ref = {
     'duong_nguoi_di_bo_cat_ngang': 'biển đường người đi bộ cắt ngang',
     'giao_nhau_voi_duong_khong_uu_tien': 'biển giao nhau với đường không ưu tiên',
     'huong_phai_di_vong_chuong_ngai_vat': 'biển hướng phải đi vòng chướng ngại vật',
-    'toc_do_toi_da_50kmh': 'biển tốc độ tối đa năm mươi ki lô mét một giờ',
-    'toc_do_toi_da_60kmh': 'biển tốc độ tối đa sáu mươi ki lô mét một giờ',
+    'toc_do_toi_da_cho_phep_50km': 'biển tốc độ tối đa năm mươi ki lô mét một giờ',
+    'toc_do_toi_da_cho_phep_60km': 'biển tốc độ tối đa sáu mươi ki lô mét một giờ',
     'tre_em': 'biển báo trẻ em'
 }
 pygame.mixer.init()
